@@ -192,6 +192,21 @@ export class PassBase extends PassStructure {
   }
 
   /**
+   * A URL the system passes to the associated app from
+   * associatedStoreIdentifiers during launch.
+   */
+  get appLaunchURL(): ApplePass['appLaunchURL'] {
+    return this.fields.appLaunchURL;
+  }
+  set appLaunchURL(v: ApplePass['appLaunchURL']) {
+    if (!v) {
+      delete this.fields.appLaunchURL;
+    } else {
+      this.fields.appLaunchURL = v;
+    }
+  }
+
+  /**
    * Brief description of the pass, used by the iOS accessibility technologies.
    * Don’t try to include all of the data on the pass in its description,
    * just include enough detail to distinguish passes of the same type.
