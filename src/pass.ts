@@ -22,7 +22,7 @@ export class Pass extends PassBase {
     fields: Partial<ApplePass> = {},
     images?: PassImages,
     localization?: import('./lib/localizations').Localizations,
-    options?: Options,
+    options?: Options
   ) {
     super(fields, images, localization, options);
     this.template = template;
@@ -95,10 +95,13 @@ export class Pass extends PassBase {
     // adding manifest
     // Construct manifest here
     const manifestJson = JSON.stringify(
-      zip.reduce((res, { path, data }) => {
-        res[path] = getBufferHash(data);
-        return res;
-      }, {} as { [k: string]: string }),
+      zip.reduce(
+        (res, { path, data }) => {
+          res[path] = getBufferHash(data);
+          return res;
+        },
+        {} as { [k: string]: string },
+      ),
     );
     zip.push({ path: 'manifest.json', data: manifestJson });
 
