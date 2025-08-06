@@ -2,7 +2,7 @@
 
 'use strict';
 
-import { toBuffer as createZip } from 'do-not-zip';
+import { ZipFile } from 'yazl';
 
 import { getBufferHash } from './lib/getBufferHash';
 import { PassImages } from './lib/images';
@@ -114,6 +114,26 @@ export class Pass extends PassBase {
     zip.push({ path: 'signature', data: signature });
 
     // finished!
-    return createZip(zip);
+    return new Promise<Buffer>((resolve, reject) => {
+      const yazlZip = new ZipFile();
+
+      for (const { path, data } of zip) {
+        if (Buffer.isBuffer(data)) {
+          yazlZip.addBuffer(data, path);
+        } else {
+          yazlZip.addBuffer(Buffer.from(data), path);
+        }
+      }
+
+      yazlZip.end();
+      const chunks: Buffer[] = [];
+      yazlZip.outputStream.on('data', (chunk: Buffer) => {
+        chunks.push(chunk);
+      });
+      yazlZip.outputStream.on('end', () => {
+        resolve(Buffer.concat((chunks as unknown) as Uint8Array[]));
+      });
+      yazlZip.outputStream.on('error', reject);
+    });
   }
 }
