@@ -393,6 +393,10 @@ export interface NFCDictionary {
    * Use a Base64 encoded X.509 SubjectPublicKeyInfo structure containing a ECDH public key for group P256.
    */
   encryptionPublicKey?: string | import('node-forge').pki.PublicKey;
+  /**
+   * Whether the NFC field requires authentication.
+   */
+  requiresAuthentication?: boolean;
 }
 
 /**
